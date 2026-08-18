@@ -4,6 +4,25 @@ A governed engineering-onboarding prototype for helping a new developer move fro
 
 The project uses a small OpenCV-style Python wrapper as the stand-in codebase. **The image-processing functions are not the product; the onboarding workflow is.**
 
+## Uses Cursor directly
+
+This repository includes a version-controlled Cursor Project Rule at `.cursor/rules/governed-onboarding.mdc`. Open the repo in Cursor and the rule gives the assistant the same plan-first, testing, dependency, and completion expectations a new engineer should follow.
+
+A reproducible walkthrough is in `docs/cursor_demo.md`.
+
+## Run the engineering gates
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+ruff check src tests
+ruff format --check src tests
+pytest --cov=src --cov-report=term-missing --cov-fail-under=90
+```
+
+GitHub Actions runs the same quality gates on pushes and pull requests.
+
 ## Problem
 
 New engineers often learn repository conventions through scattered documentation, Slack messages, senior engineers, old pull requests, and late review feedback. AI coding tools can make implementation faster, but without repository context and deterministic checks they can also make incorrect contributions faster.
@@ -11,8 +30,6 @@ New engineers often learn repository conventions through scattered documentation
 I framed the success metric as **time to first safe PR**, not raw code-generation speed.
 
 ## Approach
-
-The repository makes engineering expectations explicit across the delivery lifecycle:
 
 ```text
 Ambiguous request
@@ -36,7 +53,7 @@ CI readiness
 Pull request + human review
 ```
 
-The workflow is designed for multiple roles rather than only the developer:
+The workflow is designed for multiple roles:
 
 - **PM:** clarify requirements, assumptions, risks, and definition of done
 - **Engineer:** plan before editing, follow repository conventions, implement and test
@@ -45,47 +62,20 @@ The workflow is designed for multiple roles rather than only the developer:
 
 ## Engineering controls
 
-AI guidance is not treated as enforcement. Hard controls remain deterministic:
+AI guidance is not treated as enforcement. Hard controls remain deterministic: linting, formatting, pytest, coverage, dependency policy, pull-request review, CI, and—in a production repository—branch protection.
 
-- linting and formatting
-- pytest test suite
-- coverage threshold
-- dependency policy
-- pull-request review
-- CI
-- branch protection in a production repository
-
-The original implementation reached **11 passing pytest cases** with Ruff checks passing. This public version is a generalized portfolio project and contains no interview prompt or private company material.
-
-## Repository structure
-
-```text
-src/                  small image-processing wrapper
- tests/                deterministic behavior and validation tests
- docs/                 contribution, testing, role and CI guidance
- .github/workflows/    automated quality gates
-```
+The public implementation contains **11 pytest cases** plus Ruff and coverage gates. It is a generalized portfolio project and contains no interview prompt or private company material.
 
 ## Why OpenCV?
 
-OpenCV provides deterministic operations with obvious inputs, outputs, and edge cases. That keeps the demo focused on onboarding and governance rather than domain complexity. The repository does not reproduce OpenCV; it exposes a small internal wrapper around `opencv-python`.
+OpenCV provides deterministic operations with obvious inputs, outputs, and edge cases. That keeps the demo focused on onboarding and governance rather than domain complexity. The repository exposes a small internal wrapper around `opencv-python`; it does not reproduce OpenCV.
 
 ## What I learned
 
-The most useful pattern was **repo-centric context**: rules, docs, code patterns, tests, and CI together gave the AI assistant a much better chance of producing a compliant change. Just as importantly, generated changes still had to pass the same deterministic gates as human-written code.
-
-## What I would add in production
-
-- protected branches and required checks
-- Jira / issue-tracker integration
-- stale-document detection
-- stronger dependency controls
-- reusable role/task entry points
-- onboarding analytics: time to first PR, review iterations, CI failure rate
-- evaluation of assistant suggestions against historical accepted PRs
+The most useful pattern was **repo-centric context**: rules, docs, code patterns, tests, and CI together gave the assistant a much better chance of producing a compliant change. Generated changes still had to pass the same deterministic gates as human-written code.
 
 ## Portfolio context
 
-I built this to explore how AI coding tools can accelerate onboarding **without replacing engineering judgment or governance**. It demonstrates the level of hands-on coding fluency I use in customer-facing technical work: understanding a codebase, defining guardrails, debugging setup and import issues, validating changes, and reasoning about the path from local code to production.
+I built this to explore how Cursor can accelerate onboarding **without replacing engineering judgment or governance**. It demonstrates the level of hands-on coding fluency I use in customer-facing technical work: understanding a codebase, defining guardrails, debugging setup issues, validating changes, and reasoning about the path from local code to production.
 
 — Anastasia Chueva
