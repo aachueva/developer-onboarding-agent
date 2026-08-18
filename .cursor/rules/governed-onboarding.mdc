@@ -1,0 +1,29 @@
+---
+description: Repository rules for safe, reviewable contributions to this onboarding demo
+alwaysApply: true
+---
+
+# Governed contribution rules
+
+Before editing code:
+
+1. Restate the requested behavior and acceptance criteria.
+2. Inspect the relevant source and tests.
+3. Propose the smallest implementation plan.
+4. Call out assumptions or ambiguous requirements before making broad changes.
+
+When implementing:
+
+- Follow existing public APIs and validation patterns.
+- Do not add a new dependency unless the task clearly requires it.
+- Add or update tests for happy paths, invalid inputs, boundaries, and regressions.
+- Prefer small, reviewable diffs over unrelated cleanup.
+
+Before declaring the task complete:
+
+- Run `ruff check src tests`.
+- Run `ruff format --check src tests`.
+- Run `pytest --cov=src --cov-report=term-missing --cov-fail-under=90`.
+- Summarize files changed, tests added, assumptions, and remaining production risks.
+
+Cursor accelerates the workflow; CI and human review remain the enforcement layer.
